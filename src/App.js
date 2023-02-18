@@ -1,25 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+// import ReactDOM from 'react-dom'
+import './style.css'
+// const { useState } = React
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [items, setItems] = useState([])
+	const [text, setText] = useState('')
+
+	function handleSubmit(e) {
+		e.preventDefault()
+		if (!text) return
+		setItems([...items, { text, completed: false }])
+		setText('')
+	}
+
+	function completeItem(index) {
+		const newItems = [...items]
+		newItems[index].completed = !newItems[index].completed
+		setItems(newItems)
+	}
+
+	function deleteItem(index) {
+		const newItems = [...items]
+		newItems.splice(index, 1)
+		setItems(newItems)
+	}
+
+	return (
+		<div className='container'>
+			<h1>To-Do List</h1>
+			<form onSubmit={handleSubmit}>
+				<input
+					type='text'
+					value={text}
+					onChange={(e) => setText(e.target.value)}
+					placeholder='Add new item...'
+				/>
+				<button type='submit'>Add</button>
+			</form>
+			<ul>
+				{items.map((item, index) => (
+					<li key={index}>
+						<label>
+							<input
+								type='checkbox'
+								checked={item.completed}
+								onChange={() => completeItem(index)}
+							/>
+							{item.text}
+						</label>
+						<span className='delete' onClick={() => deleteItem(index)}>
+							&#x2715;
+						</span>
+					</li>
+				))}
+			</ul>
+		</div>
+	)
 }
 
-export default App;
+export default App
