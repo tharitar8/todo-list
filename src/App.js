@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.css'
 
 function App() {
@@ -8,7 +8,9 @@ function App() {
 	function handleSubmit(e) {
 		e.preventDefault()
 		if (!text) return
-		setItems([...items, { text, completed: false }])
+		const newItems = [...items, { text, completed: false }]
+		setItems(newItems)
+		localStorage.setItem('items', JSON.stringify(newItems))
 		setText('')
 	}
 
@@ -16,13 +18,22 @@ function App() {
 		const newItems = [...items]
 		newItems[index].completed = !newItems[index].completed
 		setItems(newItems)
+		localStorage.setItem('items', JSON.stringify(newItems))
 	}
 
 	function deleteItem(index) {
 		const newItems = [...items]
 		newItems.splice(index, 1)
 		setItems(newItems)
+		localStorage.setItem('items', JSON.stringify(newItems))
 	}
+
+	useEffect(() => {
+		const storedItems = JSON.parse(localStorage.getItem('items'))
+		if (storedItems) {
+			setItems(storedItems)
+		}
+	}, [])
 
 	return (
 		<div className='container'>
