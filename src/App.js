@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-// import ReactDOM from 'react-dom'
 import './style.css'
-// const { useState } = React
 
 function App() {
 	const [items, setItems] = useState([])
